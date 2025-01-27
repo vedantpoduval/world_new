@@ -10,6 +10,18 @@ function getNearestPoint(loc,points,threshold = Number.MAX_SAFE_INTEGER){
     }
     return nearest;
 }
+function getNearestSegment(loc,segments,threshold = Number.MAX_SAFE_INTEGER){
+    let minDist = Number.MAX_SAFE_INTEGER;
+    let nearest = null;
+    for(const seg of segments){
+        const dist = seg.distanceToPoint(loc);
+        if(dist < minDist && dist < threshold){
+            minDist = dist;
+            nearest = seg;
+        }
+    }
+    return nearest;
+}
 
 function distance(p1,p2){
     return Math.hypot(p1.x - p2.x,p1.y - p2.y);
@@ -42,7 +54,9 @@ function normalize(p){
 function magnitude(p){
     return Math.hypot(p.x,p.y);
 }
-
+function perpendicular(p){
+    return new Point(-p.y,p.x);
+}
 function translate(loc,angle,offset){
     return new Point(
         loc.x + Math.cos(angle)* offset,
@@ -84,4 +98,11 @@ function lerp2D(A,B,t){
 function getRandomColor(){
     const hue = 290 + Math.random()*260;
     return "hsl(" + hue + ",100%,60%)";
+}
+
+function getFake3dPoint(point,viewPoint, height){
+    const dir = normalize(subtract(point, viewPoint));
+    const dist = distance(point, viewPoint);
+    const scaler = Math.atan(dist / 300) / (Math.PI / 2);
+    return add(point, scale(dir, height * scaler));
 }
