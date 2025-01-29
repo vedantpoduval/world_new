@@ -4,6 +4,7 @@ class Light extends Marking{
 
         this.state = "yellow";
         this.border = this.poly.segments[0];
+         this.type = "light";
     }
     draw(ctx){
         const perp = perpendicular(this.directionVector);
